@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
+  <title>傳接球</title>
+  <style>
+    body {
+      background-color: black;
+      background-image: url(./bg.gif);
+      /* background-size: 1000px; */
+      background-repeat: no-repeat;
+      position: absolute;
+      background-position: center 150px;
+      font-family: 'Jockey One', sans-serif;
+      font-size: 3rem;
+
+    }
+
+    /* #logo{
+     background-image: url(./logo.gif);
+     background-size: contain;
+     width: 500px;
+     background-repeat: no-repeat;
+     position:relative;
+    transform: translate(0px) rotate(-30deg);
+    /* transform:rotate(-15deg) ; */
+
+    /* }  */
+    /* 背景是小智丟寶貝球(寶貝球用ps做滾動越來越大的效果)過來 我們游標皮卡丘的手拍掉  OR調換成我們抓寶 */
+    #game {
+      width: 2500px;
+      height: 700px;
+      overflow: hidden;
+      cursor: url(./藤蔓游標1.png) 50 50, auto;
+      /* 控制球攻擊的位置 */
+      position: relative;
+      transform: translate(100px 100px);
+      background-position: center;
+      transform: translateY(100px);
+      background-repeat: no-repeat;
+    }
+
+    /* 點案滑鼠游標 改變 */
+    #game:active {
+      cursor: url(./藤蔓游標2.png) 50 50, auto;
+    }
+
+    /* 控制寶貝球位移 */
+    #game img {
+      /* absolute 讓寶貝球分散跑 */
+      position: absolute;
+      /* 寶貝球大小 */
+      height: 120px;
+    }
+
+    #text-score {
+      color: rgb(227, 87, 255);
+      font-size: 30px;
+    }
+
+    #text-time {
+      color: rgb(138, 0, 0);
+      font-size: 30px;
+    }
+
+    .word {
+      color: rgba(90, 90, 90, 0.562);
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 播音樂 -->
+  <audio src="./pika.mp3" autoplay false></audio>
+  <div id="logo">
+    <div id="game"></div>
+  </div>
+  <br />
+  <!-- 開始按鍵的圖  莓果-->
+  <!-- <p align="center"><input type="button" id="btn-start" style="background-image: url(./按鈕.png)" /></p> -->
+  <input type="url" id="btn-start"
+    style="background-image: url(./Razz_Berry.png); width: 130px; height: 150px; border-style: none; transform: translateX(600px);position:absolute; background-color: black;background-repeat: no-repeat" />
+
+  <!-- 開始： <input type="image" name="btn_start" id="btn_start" img src="./藤蔓游標.png" onClick="document.form1.submit()" /> -->
+  <!-- </form> -->
+
+  <!-- 設定時間 -->
+  <div class="word">score <span id="text-score">0</span>
+    <div class="word">timer <span id="text-time">60</span> </div>
+  </div>
+
+  <script src="./jquery-3.5.1.min.js"></script>
+  <script>
+    // 宣告分數跟時間
+    let score = 0;
+    let timeleft = 60;
+
+    // 殭屍流水號
+    let id = 0;
+
+    // const rand = (num) => {
+    //   return Math.floor(Math.random() * num);
+    // };
+    const rand = (num) => {
+      return Math.random() * num;
+    };
+    // 每秒隨機出現的殭屍位置
+    // 瓦斯
+    const movezombie1 = (id) => {
+      $(`#z1${id}`).animate(
+        {
+          left: rand(65) + "%",
+          top: rand(85) + "%",
+        },
+        // 球移動速度
+        5000,
+        function () {
+          movezombie1(id);
+        }
+      );
+    };
+    // 未知
+    const movezombie2 = (id) => {
+      $(`#z2${id}`).animate(
+        {
+          left: rand(80) + "%",
+          top: rand(70) + "%",
+        },
+        1000,
+        function () {
+          movezombie2(id);
+        }
+      );
+    };
+    // 口愛
+    const movezombie3 = (id) => {
+      $(`#z3${id}`).animate(
+        {
+          right: rand(50) + "%",
+          bottom: rand(30) + "%",
+        },
+        800,
+        function () {
+          movezombie3(id);
+        }
+      );
+    };
+
+    // 呆
+    const movezombie4 = (id) => {
+      $(`#z4${id}`).animate(
+        {
+          right: rand(80) + "%",
+          bottom: rand(20) + "%",
+        },
+        1500,
+        function () {
+          movezombie4(id);
+        }
+      );
+    };
+
+    // 貝
+    const movezombie5 = (id) => {
+      $(`#z5${id}`).animate(
+        {
+          left: rand(40) + "%",
+          bottom: rand(100) + "%",
+        },
+        3500,
+        function () {
+          movezombie5(id);
+        }
+      );
+    };
+
+    // 姐
+    const movezombie6 = (id) => {
+      $(`#z6${id}`).animate(
+        {
+          left: rand(40) + "%",
+          top: rand(10) + "%",
+        },
+        2800,
+        function () {
+          movezombie6(id);
+        }
+      );
+    };
+
+    // 泥
+    const movezombie7 = (id) => {
+      $(`#z7${id}`).animate(
+        {
+          left: rand(80) + "%",
+          bottom: rand(80) + "%",
+        },
+        6000,
+        function () {
+          movezombie7(id);
+        }
+      );
+    };
+
+    // 狗
+    const movezombie8 = (id) => {
+      $(`#z8${id}`).animate(
+        {
+          right: rand(80) + "%",
+          bottom: rand(60) + "%",
+        },
+        700,
+        function () {
+          movezombie8(id);
+        }
+      );
+    };
+
+    // 紐拉
+    const movezombie9 = (id) => {
+      $(`#z9${id}`).animate(
+        {
+          right: rand(20) + "%",
+          bottom: rand(80) + "%",
+        },
+        1700,
+        function () {
+          movezombie9(id);
+        }
+      );
+    };
+
+    // 鬼
+    const movezombie10 = (id) => {
+      $(`#z10${id}`).animate(
+        {
+          right: rand(70) + "%",
+          top: rand(80) + "%",
+        },
+        3000,
+        function () {
+          movezombie10(id);
+        }
+      );
+    };
+    // 鳥
+    const movezombie11 = (id) => {
+      $(`#z11${id}`).animate(
+        {
+          left: rand(20) + "%",
+          top: rand(10) + "%",
+        },
+        3000,
+        function () {
+          movezombie11(id);
+        }
+      );
+    };
+
+    // 鼠
+    const movezombie12 = (id) => {
+      $(`#z12${id}`).animate(
+        {
+          right: rand(20) + "%",
+          top: rand(60) + "%",
+        },
+        8000,
+        function () {
+          movezombie12(id);
+        }
+      );
+    };
+
+    // 蝠
+    const movezombie13 = (id) => {
+      $(`#z13${id}`).animate(
+        {
+          left: rand(80) + "%",
+          top: rand(60) + "%",
+        },
+        600,
+        function () {
+          movezombie13(id);
+        }
+      );
+    };
+
+    // 超夢
+    const movezombie14 = (id) => {
+      $(`#z14${id}`).animate(
+        {
+          left: rand(90) + "%",
+          top: rand(90) + "%",
+        },
+        100,
+        function () {
+          movezombie14(id);
+        }
+      );
+    };
+    $("#btn-start").click(function () {
+      // 停用開始按鈕
+      $(this).attr("disabled", true);
+
+      // 重設
+      score = 0;
+      $("#text-score").text(score);
+      timeleft = 60;
+      $("#text-time").text(timeleft);
+
+      let timer = setInterval(function () {
+        // 修改秒數
+        timeleft--;
+        $("#text-time").text(timeleft);
+
+        // if (timeleft === 0) {
+        //   clearInterval(timer);
+        //   $("#btn-start").attr("disabled", false);
+        //   confirm("你被收服了");
+        //   $("#game img").remove();
+        //   //   setTimeout((){=>
+        //     alert('時間到')
+        // else
+        if (timeleft === 0) {
+          clearInterval(timer)
+          $('#btn-start').attr('disabled', false)
+          $('#game img').remove()
+          setTimeout(() => {
+            confirm('gotcha!')
+          }, 50)
+        } else {
+
+          // 每秒隨機出現殭屍的終點
+          // 瓦斯
+
+          // 白話文:0~10裡抽數字,若大於三就出球
+          if (rand(10) > 9.3) {
+            $("#game").append(`<img src="./寶貝球1.gif" id="z1${id}">`);
+            $(`#z1${id}`).css({
+              left: rand(70) + "%",
+              bottom: rand(50) + "%",
+            });
+            movezombie1(id);
+            id++;
+          }
+        }
+        // 未知
+        if (rand(10) > 9.5) {
+          $("#game").append(`<img src="./寶貝球2.gif" id="z2${id}">`);
+          $(`#z2${id}`).css({
+            left: rand(10) + "%",
+            top: rand(10) + "%",
+          });
+          movezombie2(id);
+          id++;
+        }
+        // 口愛
+        if (rand(10) > 9.4) {
+          $("#game").append(`<img src="./寶貝球3.gif" id="z3${id}">`);
+          $(`#z3${id}`).css({
+            right: rand(10) + "%",
+            bottom: rand(10) + "%",
+          });
+          movezombie3(id);
+          id++;
+        }
+        // 呆
+        if (rand(10) > 9.8) {
+          $("#game").append(`<img src="./寶貝球4.gif" id="z4${id}">`);
+          $(`#z4${id}`).css({
+            left: rand(50) + "%",
+            bottom: rand(60) + "%",
+          });
+          movezombie4(id);
+          id++;
+        }
+
+        //           // 貝
+        if (rand(10) > 9.3) {
+          $("#game").append(`<img src="./寶貝球5.gif" id="z5${id}">`);
+          $(`#z5${id}`).css({
+            right: rand(50) + "%",
+            top: rand(30) + "%",
+          });
+          movezombie5(id);
+          id++;
+        }
+
+        //            // 姐
+        if (rand(10) > 9.7) {
+          $("#game").append(`<img src="./寶貝球6.gif" id="z6${id}">`);
+          $(`#z6${id}`).css({
+            right: rand(10) + "%",
+            top: rand(60) + "%",
+          });
+          movezombie6(id);
+          id++;
+        }
+
+        //            // 泥
+        if (rand(10) > 9.4) {
+          $("#game").append(`<img src="./寶貝球7.gif" id="z7${id}">`);
+          $(`#z7${id}`).css({
+            right: rand(10) + "%",
+            top: rand(30) + "%",
+          });
+          movezombie7(id);
+          id++;
+        }
+
+        //            // 狗
+        if (rand(10) > 9.6) {
+          $("#game").append(`<img src="./寶貝球8.gif" id="z8${id}">`);
+          $(`#z8${id}`).css({
+            left: rand(60) + "%",
+            bottom: rand(40) + "%",
+
+          });
+          movezombie8(id);
+          id++;
+        }
+        //           // 紐拉
+        if (rand(10) > 9.6) {
+          $("#game").append(`<img src="./寶貝球9.gif" id="z9${id}">`);
+          $(`#z9${id}`).css({
+            right: rand(60) + "%",
+            top: rand(80) + "%",
+          });
+          movezombie9(id);
+          id++;
+        }
+
+        //  // 鬼
+        if (rand(10) > 9.5) {
+          $("#game").append(`<img src="./寶貝球10.gif" id="z10${id}">`);
+          $(`#z10${id}`).css({
+            right: rand(15) + "%",
+            top: rand(20) + "%",
+          });
+          movezombie10(id);
+          id++;
+        }
+        // // 鳥
+        if (rand(10) > 9.5) {
+          $("#game").append(`<img src="./寶貝球11.gif" id="z11${id}">`);
+          $(`#z11${id}`).css({
+            left: rand(70) + "%",
+            top: rand(70) + "%",
+          });
+          movezombie11(id);
+          id++;
+        }
+
+        //           // 鼠
+        if (rand(10) > 9.2) {
+          $("#game").append(`<img src="./寶貝球12.gif" id="z12${id}">`);
+          $(`#z12${id}`).css({
+            left: rand(70) + "%",
+            bottom: rand(30) + "%",
+          });
+          movezombie12(id);
+          id++;
+        }
+        //            // 蝠
+        if (rand(10) > 9.3) {
+          $("#game").append(`<img src="./寶貝球13.gif" id="z13${id}">`);
+          $(`#z13${id}`).css({
+            right: rand(80) + "%",
+
+          });
+          movezombie13(id);
+          id++;
+        }
+
+        // 超夢
+        if (rand(10) > 9.9) {
+          $("#game").append(`<img src="./寶貝球14.gif" id="z14${id}">`);
+          $(`#z14${id}`).css({
+            top: rand(50) + "%",
+
+          });
+          movezombie14(id);
+          id++;
+        }
+
+
+        // 幾秒之後開始出怪
+      }, 1000);
+    });
+
+
+    // 滑鼠按過之後的圖片
+    $("#game").on("click", "img", function () {
+      if ($(this).attr("src") === "./寶貝球1.gif") {
+        $(this).attr("src", "./寶可夢/瓦斯.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球2.gif") {
+        $(this).attr("src", "./寶可夢/未知.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球3.gif") {
+        $(this).attr("src", "./寶可夢/口愛.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球4.gif") {
+        $(this).attr("src", "./寶可夢/呆.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球5.gif") {
+        $(this).attr("src", "./寶可夢/貝.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+      else if ($(this).attr("src") === "./寶貝球6.gif") {
+        $(this).attr("src", "./寶可夢/姐.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+      else if ($(this).attr("src") === "./寶貝球7.gif") {
+        $(this).attr("src", "./寶可夢/泥.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+      else if ($(this).attr("src") === "./寶貝球8.gif") {
+        $(this).attr("src", "./寶可夢/狗.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球9.gif") {
+        $(this).attr("src", "./寶可夢/紐拉.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球10.gif") {
+        $(this).attr("src", "./寶可夢/鬼.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球11.gif") {
+        $(this).attr("src", "./寶可夢/鳥.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+      else if ($(this).attr("src") === "./寶貝球12.gif") {
+        $(this).attr("src", "./寶可夢/鼠.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+      else if ($(this).attr("src") === "./寶貝球13.gif") {
+        $(this).attr("src", "./寶可夢/蝠.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+      else if ($(this).attr("src") === "./寶貝球14.gif") {
+        $(this).attr("src", "./寶可夢/fast only one.png");
+        $(this).stop(true, false);
+        $(this).css("pointer-events", "none");
+        score++;
+        $("#text-score").text(score);
+      }
+
+
+    });
+
+  </script>
+</body>
+
+</html>
